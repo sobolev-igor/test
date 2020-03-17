@@ -1,0 +1,36 @@
+require('@babel/register');
+require('core-js');
+require('regenerator-runtime/runtime');
+require('dotenv').config();
+
+const HDWalletProvider = require('@truffle/hdwallet-provider');
+
+module.exports = {
+  plugins: [
+    'truffle-plugin-verify',
+  ],
+  networks: {
+    kovan: {
+      provider: () => new HDWalletProvider(process.env.MNEMONIC, `https://kovan.infura.io/v3/${process.env.INFURA_API_KEY}`, 0),
+      network_id: 42,
+      gas: 6000000,
+      gasPrice: 1100000000,
+      timeoutBlocks: 10,
+      skipDryRun: true,
+    },
+  },
+  compilers: {
+    solc: {
+      version: '0.6.4',
+      settings: {
+        optimizer: {
+          enabled: true,
+          runs: 200,
+        },
+      },
+    },
+  },
+  api_keys: {
+    etherscan: `${process.env.ETHERSCAN_API_KEY}`,
+  },
+};
